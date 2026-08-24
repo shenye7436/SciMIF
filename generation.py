@@ -93,18 +93,22 @@ def load_existing_ids(output_path):
     print(f'Detected {len(existing_ids)} existing responses')
     return existing_ids
 
-def _process_one(idx, data, model_name):
-    response_text = _call_model_worker(data.get('edit_question'), data.get('image'), model_name)
+def _process_one(idx, data, model_name, image_root):
+    image_path = data.get('image')
+    if image_path and not os.path.isabs(image_path):
+        image_path = os.path.join(image_root, image_path)
+    response_text = _call_model_worker(data.get('edit_question'), image_path, model_name)
     if not response_text or response_text.startswith('failed') or 'data_inspection_failed' in str(response_text):
         print(f"\n[response rejected] id={data.get('id')}")
         print(f"question: {data.get('edit_question')[:80]}\n")
         return (idx, None)
     return (idx, {'id': data.get('id'), 'edit_question': data.get('edit_question'), 'answer': data.get('answer'), 'response': response_text, 'instruction_list': data.get('instruction_list')})
 
-def process_jsonl(subject, workers=4, model_name=None):
+def process_jsonl(subject, workers=4, model_name=None, image_root='images'):
     model_name = (model_name or '').strip()
     if not model_name:
         raise SystemExit('Specify the response model with --model.')
+    image_root = os.path.abspath(image_root)
     input_path = f'./output_data/{subject}.jsonl'
     out_dir = os.path.join('generation', model_name)
     os.makedirs(out_dir, exist_ok=True)
@@ -121,7 +125,7 @@ def process_jsonl(subject, workers=4, model_name=None):
     with ProcessPoolExecutor(max_workers=workers, initializer=_init_worker) as ex, open(output_path, 'a', encoding='utf-8') as fout:
         for i in tqdm(range(0, len(lines), batch_size)):
             batch = lines[i:i + batch_size]
-            futures = [ex.submit(_process_one, i + j, d, model_name) for j, d in enumerate(batch)]
+            futures = [ex.submit(_process_one, i + j, d, model_name, image_root) for j, d in enumerate(batch)]
             for fut in as_completed(futures):
                 try:
                     _, item = fut.result()
@@ -137,6 +141,7 @@ if __name__ == '__main__':
     parser.add_argument('--subjects', nargs='+', default=None, metavar='NAME', help='One or more subjects, for example: chemistry physics geography biology material.')
     parser.add_argument('--workers', type=int, default=20, help='Number of parallel worker processes.')
     parser.add_argument('--model', required=True, help='Model name used for response generation.')
+    parser.add_argument('--image-root', default='images', help='Root directory containing subject/benchmark/images paths.')
     args = parser.parse_args()
     subjects = list(args.subjects) if args.subjects else [args.subject]
     for subj in subjects:
@@ -144,4 +149,4 @@ if __name__ == '__main__':
         if not subj:
             continue
         print(f'\n========== subject: {subj} ==========')
-        process_jsonl(subj, args.workers, model_name=args.model)
+        process_jsonl(subj, args.workers, model_name=args.model, image_root=args.image_root)
