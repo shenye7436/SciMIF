@@ -197,18 +197,17 @@ def enhance_question(client, model, question, answer, item_instruction_list, gli
     return (current_question, final_instruction_meta, choose_instruction)
 
 def load_subject_records(base_dir: Path, subject: str):
-    canonical_subject = {'life': 'biology', 'materials': 'material'}.get(subject, subject)
     input_dir = base_dir / 'original_data'
-    paths = sorted(input_dir.glob(f'{canonical_subject}_*.json'), key=lambda path: int(path.stem.rsplit('_', 1)[1]))
+    paths = sorted(input_dir.glob(f'{subject}_*.json'), key=lambda path: int(path.stem.rsplit('_', 1)[1]))
     if not paths:
-        raise FileNotFoundError(f'No original-data files found for subject {canonical_subject!r} in {input_dir}')
+        raise FileNotFoundError(f'No original-data files found for subject {subject!r} in {input_dir}')
     records = [load_json(path) for path in paths]
     for path, record in zip(paths, records):
         if not isinstance(record.get('id'), int):
             raise ValueError(f'Missing integer id in {path}')
         if not isinstance(record.get('query'), str):
             raise ValueError(f'Missing query in {path}')
-    return (canonical_subject, records)
+    return (subject, records)
 
 def process(subject, model, N, K):
     BASE_DIR = Path(__file__).resolve().parent
@@ -249,7 +248,7 @@ def process(subject, model, N, K):
             final_q, final_meta, choose_inst = enhance_question(client, model, item['query'], answer, item.get('instruction_list', []), glib, slib, gmap, i2g, N, K, limiter)
             res = {'id': idx, 'task': item.get('task', 'Unknown_Task'), 'original_question': item['query'], 'edit_question': final_q, 'answer': answer, 'choose_instruction': choose_inst, 'instruction_list': final_meta}
             if 'image' in item and item['image']:
-                res['image'] = str(Path('sample') / item['image'])
+                res['image'] = item['image']
             return res
         except Exception:
             traceback.print_exc()
@@ -277,7 +276,7 @@ def process(subject, model, N, K):
             print(f'{k}: {v}')
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--subject', required=True)
+    parser.add_argument('--subject', required=True, help='Scientific discipline: chemistry, physics, geography, life, or materials.')
     parser.add_argument('--model', required=True)
     parser.add_argument('--N', type=int, default=3, help='maximum number of general-constraint categories sampled per item')
     parser.add_argument('--K', type=int, default=3, help='maximum generation attempts for each candidate general constraint')

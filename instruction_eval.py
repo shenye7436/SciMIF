@@ -126,7 +126,7 @@ if __name__ == '__main__':
     multiprocessing.set_start_method('spawn', force=True)
     parser = argparse.ArgumentParser(description='Evaluate generation/{model}/{subject}.jsonl and write evaluation results.')
     parser.add_argument('--subject', default='chemistry', help='One subject; ignored when --subjects is provided.')
-    parser.add_argument('--subjects', nargs='+', default=None, metavar='NAME', help='One or more subjects, for example: chemistry physics geography biology material.')
+    parser.add_argument('--subjects', nargs='+', default=None, metavar='NAME', help='One or more subjects, for example: chemistry physics geography life materials.')
     parser.add_argument('--model', required=True, help='Generation subdirectory containing model responses.')
     parser.add_argument('--workers', type=int, default=8, help='Number of parallel evaluator processes.')
     args = parser.parse_args()

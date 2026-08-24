@@ -61,7 +61,7 @@ A sample contains the following fields:
 - `answer`: Reference answer.
 - `choose_instruction`: Applied scientific constraints.
 - `instruction_list`: All constraints associated with the sample.
-- `image`: Optional image path for multimodal samples.
+- `image`: Optional image path or list of image paths for multimodal samples.
 
 ### 2. Generate Model Responses
 
@@ -97,6 +97,5 @@ evaluation/{model}/{subject}.jsonl
 ```
 
 Each output record contains the generated response and the evaluation result for every applicable instruction.
-
 
 
