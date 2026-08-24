@@ -24,32 +24,17 @@ SciMIF is constructed by augmenting samples from publicly available scientific d
 | Physics | UGPhysics, PhysReason, PhysUniBench |
 
 
-## Sample Data
-
-Each sample is stored as:
-
-```text
-data/sample/{subject}_{id}.json
-```
-
-A sample contains the following fields:
-
-- `id`: Sample ID.
-- `task`: Scientific task type.
-- `original_question`: Original scientific question.
-- `edit_question`: Question after constraint injection.
-- `answer`: Reference answer.
-- `choose_instruction`: Applied scientific constraints.
-- `instruction_list`: All constraints associated with the sample.
-- `image`: Optional image path for multimodal samples.
-
-
 ## Usage
 
 ### 1. Construct Constraint-Augmented Questions
 
-`main.py` constructs new questions from prepared source records. The original source data are not included, so this step can be skipped when only inspecting the released samples.
+`main.py` reads source records from:
 
+```text
+original_data/{subject}_{id}.json
+```
+
+Run the construction script:
 ```bash
 python main.py \
   --subject chemistry \
@@ -63,6 +48,17 @@ Constructed questions are saved to:
 ```text
 output_data/{subject}.jsonl
 ```
+
+A sample contains the following fields:
+
+- `id`: Sample ID.
+- `task`: Scientific task type.
+- `original_question`: Original scientific question.
+- `edit_question`: Question after constraint injection.
+- `answer`: Reference answer.
+- `choose_instruction`: Applied scientific constraints.
+- `instruction_list`: All constraints associated with the sample.
+- `image`: Optional image path for multimodal samples.
 
 ### 2. Generate Model Responses
 
