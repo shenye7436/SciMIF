@@ -49,6 +49,9 @@ Constructed questions are saved to:
 output_data/{subject}.jsonl
 ```
 
+`output_data` should not be treated as the final benchmark directly. The constructed samples require human verification.
+
+
 A sample contains the following fields:
 
 - `id`: Sample ID.
