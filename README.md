@@ -6,7 +6,7 @@ SciMIF is a benchmark for evaluating whether Multimodal Large Language Models (M
 
 ```bash
 git clone https://github.com/shenye7436/SciMIF.git
-cd SciMIF/code
+cd SciMIF
 
 python -m pip install -r requirements.txt
 ```
