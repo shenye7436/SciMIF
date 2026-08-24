@@ -85,7 +85,7 @@ The selected model must support image inputs when processing multimodal samples.
 
 ```bash
 python instruction_eval.py \
-  --subjects chemistry physics geography biology material \
+  --subjects chemistry physics geography life materials \
   --model MODEL_NAME \
   --workers 4
 ```
