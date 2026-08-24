@@ -67,8 +67,9 @@ A sample contains the following fields:
 
 ```bash
 python generation.py \
-  --subjects chemistry physics geography biology material \
+  --subjects chemistry physics geography life materials \
   --model MODEL_NAME \
+  --image-root images \
   --workers 4
 ```
 
