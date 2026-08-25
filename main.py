@@ -22,6 +22,35 @@ def load_json(path: Path):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
+def normalize_image_value(image_value):
+    if not image_value:
+        return None
+    values = image_value if isinstance(image_value, list) else [image_value]
+    normalized_paths = []
+    for value in values:
+        if not isinstance(value, str):
+            raise ValueError(f'Image paths must be strings, got {type(value).__name__}')
+        value = value.strip()
+        if not value or value == '[]' or value.endswith('/[]'):
+            continue
+        paths = [value]
+        if ',images/' in value:
+            first_path, *remaining_names = value.split(',images/')
+            benchmark_dir = first_path.rsplit('/images/', 1)[0]
+            paths = [first_path] + [f'{benchmark_dir}/images/{name}' for name in remaining_names]
+        for image_path in paths:
+            image_path = image_path.strip()
+            if image_path.startswith('images/'):
+                image_path = image_path[len('images/'):]
+            if image_path.startswith('physics/PhysUnivBench/'):
+                image_path = image_path.replace('physics/PhysUnivBench/', 'physics/PhysUniBench/', 1)
+            if image_path.startswith('materials/'):
+                image_path = image_path.replace('materials/', 'material/', 1)
+            normalized_paths.append(image_path)
+    if not normalized_paths:
+        return None
+    return normalized_paths[0] if len(normalized_paths) == 1 else normalized_paths
+
 def load_existing_results(path: Path):
     if not path.exists():
         return ({}, set())
@@ -198,15 +227,31 @@ def enhance_question(client, model, question, answer, item_instruction_list, gli
 
 def load_subject_records(base_dir: Path, subject: str):
     input_dir = base_dir / 'original_data'
-    paths = sorted(input_dir.glob(f'{subject}_*.json'), key=lambda path: int(path.stem.rsplit('_', 1)[1]))
-    if not paths:
-        raise FileNotFoundError(f'No original-data files found for subject {subject!r} in {input_dir}')
-    records = [load_json(path) for path in paths]
-    for path, record in zip(paths, records):
-        if not isinstance(record.get('id'), int):
-            raise ValueError(f'Missing integer id in {path}')
-        if not isinstance(record.get('query'), str):
-            raise ValueError(f'Missing query in {path}')
+    input_file = input_dir / f'{subject}.json'
+    if input_file.exists():
+        source_records = load_json(input_file)
+        if not isinstance(source_records, list):
+            raise ValueError(f'Expected a JSON array in {input_file}')
+    else:
+        paths = sorted(input_dir.glob(f'{subject}_*.json'), key=lambda path: int(path.stem.rsplit('_', 1)[1]))
+        if not paths:
+            raise FileNotFoundError(f'No original data found for subject {subject!r} in {input_dir}')
+        source_records = [load_json(path) for path in paths]
+    records = []
+    for idx, source_record in enumerate(source_records):
+        if not isinstance(source_record, dict):
+            raise ValueError(f'Expected an object at index {idx} in the {subject!r} data')
+        if not isinstance(source_record.get('query'), str):
+            raise ValueError(f'Missing query at index {idx} in the {subject!r} data')
+        record = dict(source_record)
+        record['id'] = idx
+        if 'image' in record:
+            normalized_image = normalize_image_value(record['image'])
+            if normalized_image is None:
+                record.pop('image')
+            else:
+                record['image'] = normalized_image
+        records.append(record)
     return (subject, records)
 
 def process(subject, model, N, K):

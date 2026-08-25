@@ -31,8 +31,10 @@ SciMIF is constructed by augmenting samples from publicly available scientific d
 `main.py` reads source records from:
 
 ```text
-original_data/{subject}_{id}.json
+original_data/{subject}.json
 ```
+
+Each file is a JSON array. Record IDs are assigned from the array indices.
 
 Run the construction script:
 ```bash
@@ -97,5 +99,4 @@ evaluation/{model}/{subject}.jsonl
 ```
 
 Each output record contains the generated response and the evaluation result for every applicable instruction.
-
 
