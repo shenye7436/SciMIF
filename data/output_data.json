@@ -1,0 +1,24 @@
+[
+  {
+    "id": 0,
+    "task": "MolCustom_AtomNum",
+    "original_question": "The molecule is composed of 5 carbon atoms, 1 bromine atom, and 2 oxygen atoms. The output is in SELFIES or SMILES format.",
+    "edit_question": "The molecule is composed of 5 carbon atoms, 1 bromine atom, and 2 oxygen atoms. The output is in SELFIES format.",
+    "answer": null,
+    "choose_instruction": [
+      "chemistry_atom_count_constraint"
+    ],
+    "instruction_list": [
+      {
+        "instruction_name": "chemistry_atom_count_constraint",
+        "source": "core_task",
+        "required_parameters": "5 carbon atoms, 1 bromine atom, and 2 oxygen atoms"
+      },
+      {
+        "instruction_name": "chemistry_molecular_format_validity",
+        "source": "core_task",
+        "required_parameters": "SELFIES"
+      }
+    ]
+  }
+]

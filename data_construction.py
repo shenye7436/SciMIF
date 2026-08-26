@@ -256,7 +256,7 @@ def load_subject_records(base_dir: Path, subject: str):
 
 def process(subject, model, N, K):
     BASE_DIR = Path(__file__).resolve().parent
-    instruction_lib_path = BASE_DIR / 'instruction.jsonl'
+    instruction_lib_path = BASE_DIR / 'data' / 'instruction.jsonl'
     subject, raw_data = load_subject_records(BASE_DIR, subject)
     output_file = BASE_DIR / 'output_data' / f'{subject}.jsonl'
     glib, slib, gmap, i2g = load_instruction_library(instruction_lib_path)

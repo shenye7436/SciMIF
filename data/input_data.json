@@ -1,0 +1,28 @@
+[
+  {
+    "query": "The molecule is composed of 5 carbon atoms, 1 bromine atom, and 2 oxygen atoms. The output is in SELFIES or SMILES format.",
+    "parameters": {
+      "carbon": 5,
+      "oxygen": 2,
+      "nitrogen": 0,
+      "sulfur": 0,
+      "fluorine": 0,
+      "chlorine": 0,
+      "bromine": 1,
+      "iodine": 0,
+      "phosphorus": 0,
+      "boron": 0,
+      "silicon": 0,
+      "selenium": 0,
+      "tellurium": 0,
+      "arsenic": 0,
+      "antimony": 0,
+      "bismuth": 0,
+      "polonium": 0
+    },
+    "task": "MolCustom_AtomNum",
+    "instruction_list": [
+      "chemistry_atom_count_constraint"
+    ]
+  }
+]

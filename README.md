@@ -28,17 +28,18 @@ SciMIF is constructed by augmenting samples from publicly available scientific d
 
 ### 1. Construct Constraint-Augmented Questions
 
-`main.py` reads source records from:
+`data_construction.py` reads source records from:
 
 ```text
 original_data/{subject}.json
 ```
 
 Each file is a JSON array. Record IDs are assigned from the array indices.
+The source datasets are not included in this repository. See `data/input_data.json` for a one-record input example and `data/output_data.json` for its corresponding constructed output.
 
 Run the construction script:
 ```bash
-python main.py \
+python data_construction.py \
   --subject chemistry \
   --model MODEL_NAME \
   --N 3 \
@@ -99,4 +100,3 @@ evaluation/{model}/{subject}.jsonl
 ```
 
 Each output record contains the generated response and the evaluation result for every applicable instruction.
-
