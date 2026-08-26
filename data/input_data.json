@@ -3,7 +3,7 @@
     "query": "<original scientific question>",
     "target": "<reference answer>",
     "task": "<scientific task type>",
-    "instruction_list": [
+    "scientific_instruction_list": [
       "<scientific instruction name>"
     ],
     "image": "<optional subject/benchmark/images/example.png>"

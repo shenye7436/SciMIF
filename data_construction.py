@@ -289,8 +289,9 @@ def process(subject, model, N, K):
         answer = item.get('target') or item.get('answer') or item.get('target_answer')
         if not answer:
             answer = None
+        scientific_instruction_list = item.get('scientific_instruction_list', item.get('instruction_list', []))
         try:
-            final_q, final_meta, choose_inst = enhance_question(client, model, item['query'], answer, item.get('instruction_list', []), glib, slib, gmap, i2g, N, K, limiter)
+            final_q, final_meta, choose_inst = enhance_question(client, model, item['query'], answer, scientific_instruction_list, glib, slib, gmap, i2g, N, K, limiter)
             res = {'id': idx, 'task': item.get('task', 'Unknown_Task'), 'original_question': item['query'], 'edit_question': final_q, 'answer': answer, 'choose_instruction': choose_inst, 'instruction_list': final_meta}
             if 'image' in item and item['image']:
                 res['image'] = item['image']
