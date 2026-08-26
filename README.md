@@ -97,3 +97,33 @@ evaluation/{model}/{subject}.jsonl
 ```
 
 Each output record contains the generated response and the evaluation result for every applicable instruction.
+
+### 4. Evaluate Answer Correctness
+
+CompassVerifier dependencies are optional and require an environment supported by vLLM:
+
+```bash
+python -m pip install -r requirements-verifier.txt
+```
+
+Run answer-correctness evaluation:
+
+```bash
+python correctness_eval.py \
+  --subjects chemistry physics geography life materials \
+  --model MODEL_NAME \
+  --generation-dir generation \
+  --evaluation-dir evaluation \
+  --output-dir correctness \
+  --verifier-model opencompass/CompassVerifier-3B \
+  --batch-size 8
+```
+
+For each subject, results are separated by the binary verifier score:
+
+```text
+correctness/{model}/{subject}_score1.jsonl
+correctness/{model}/{subject}_score0.jsonl
+```
+
+If the corresponding instruction-evaluation file is available, its `instruction_results` are included in each correctness record.
