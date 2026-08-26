@@ -153,7 +153,7 @@ def main() -> None:
         from transformers import AutoTokenizer
         from vllm import LLM, SamplingParams
     except ImportError as exc:
-        raise SystemExit('Install CompassVerifier dependencies with: pip install -r requirements-verifier.txt') from exc
+        raise SystemExit('Install CompassVerifier dependencies by following https://github.com/open-compass/CompassVerifier') from exc
 
     tokenizer = AutoTokenizer.from_pretrained(args.verifier_model)
     verifier = LLM(model=args.verifier_model, tensor_parallel_size=args.tensor_parallel_size)

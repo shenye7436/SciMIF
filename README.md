@@ -100,11 +100,7 @@ Each output record contains the generated response and the evaluation result for
 
 ### 4. Evaluate Answer Correctness
 
-We use [CompassVerifier-32B](https://github.com/open-compass/CompassVerifier) as the judge model for answer-correctness evaluation. CompassVerifier dependencies are optional and require an environment supported by vLLM:
-
-```bash
-python -m pip install -r requirements-verifier.txt
-```
+We use [CompassVerifier-32B](https://github.com/open-compass/CompassVerifier) as the judge model for answer-correctness evaluation. Please follow the official CompassVerifier documentation to configure the verifier environment and vLLM dependencies for your hardware.
 
 Run answer-correctness evaluation:
 
