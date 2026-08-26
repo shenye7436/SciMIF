@@ -63,7 +63,7 @@ A sample contains the following fields:
 - `edit_question`: Question after constraint injection.
 - `answer`: Reference answer.
 - `choose_instruction`: Applied scientific constraints.
-- `instruction_list`: All constraints associated with the sample.
+- `instruction_list`: All constraints associated with the sample. The `source` field is `original` for constraints already present in the original question, `core_task` for candidate scientific constraints supplied by the input record, or `added_general` for additional general constraints introduced during construction.
 - `image`: Optional image path or list of image paths for multimodal samples.
 
 ### 2. Generate Model Responses

@@ -10,9 +10,18 @@
     ],
     "instruction_list": [
       {
-        "instruction_name": "<instruction name>",
+        "instruction_name": "<instruction already present in the original question>",
+        "source": "original"
+      },
+      {
+        "instruction_name": "<candidate scientific instruction>",
         "source": "core_task",
-        "required_parameters": "<concrete instruction parameters>"
+        "required_parameters": "<concrete scientific parameters>"
+      },
+      {
+        "instruction_name": "<additional general instruction>",
+        "source": "added_general",
+        "required_parameters": "<concrete general parameters>"
       }
     ],
     "image": "<optional subject/benchmark/images/example.png>"
