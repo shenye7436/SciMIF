@@ -100,7 +100,7 @@ Each output record contains the generated response and the evaluation result for
 
 ### 4. Evaluate Answer Correctness
 
-CompassVerifier dependencies are optional and require an environment supported by vLLM:
+We use [CompassVerifier-32B](https://github.com/open-compass/CompassVerifier) as the judge model for answer-correctness evaluation. CompassVerifier dependencies are optional and require an environment supported by vLLM:
 
 ```bash
 python -m pip install -r requirements-verifier.txt
@@ -115,7 +115,7 @@ python correctness_eval.py \
   --generation-dir generation \
   --evaluation-dir evaluation \
   --output-dir correctness \
-  --verifier-model opencompass/CompassVerifier-3B \
+  --verifier-model opencompass/CompassVerifier-32B \
   --batch-size 8
 ```
 

@@ -141,7 +141,7 @@ def main() -> None:
     parser.add_argument('--generation-dir', default='generation', type=Path, help='Generation result root directory.')
     parser.add_argument('--evaluation-dir', default='evaluation', type=Path, help='Instruction evaluation root directory.')
     parser.add_argument('--output-dir', default='correctness', type=Path, help='Correctness result root directory.')
-    parser.add_argument('--verifier-model', default='opencompass/CompassVerifier-3B', help='CompassVerifier model name or path.')
+    parser.add_argument('--verifier-model', default='opencompass/CompassVerifier-32B', help='CompassVerifier model name or path.')
     parser.add_argument('--use-cot', action='store_true', help='Use the chain-of-thought verifier prompt.')
     parser.add_argument('--temperature', type=float, default=0.0)
     parser.add_argument('--max-tokens', type=int, default=2048)
