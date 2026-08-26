@@ -115,13 +115,15 @@ def _process_one(idx, data, model_name, image_root):
         return (idx, None)
     return (idx, {'id': data.get('id'), 'edit_question': data.get('edit_question'), 'answer': data.get('answer'), 'response': response_text, 'instruction_list': data.get('instruction_list')})
 
-def process_jsonl(subject, workers=4, model_name=None, image_root='images'):
+def process_jsonl(subject, workers=4, model_name=None, image_root='images', input_dir='output_data', output_dir='generation'):
     model_name = (model_name or '').strip()
     if not model_name:
         raise SystemExit('Specify the response model with --model.')
     image_root = os.path.abspath(image_root)
-    input_path = f'./output_data/{subject}.jsonl'
-    out_dir = os.path.join('generation', model_name)
+    input_dir = os.path.abspath(os.path.expanduser(input_dir))
+    output_dir = os.path.abspath(os.path.expanduser(output_dir))
+    input_path = os.path.join(input_dir, f'{subject}.jsonl')
+    out_dir = os.path.join(output_dir, model_name)
     os.makedirs(out_dir, exist_ok=True)
     output_path = os.path.join(out_dir, f'{subject}.jsonl')
     existing_ids = load_existing_ids(output_path)
@@ -152,6 +154,8 @@ if __name__ == '__main__':
     parser.add_argument('--subjects', nargs='+', default=None, metavar='NAME', help='One or more subjects, for example: chemistry physics geography life materials.')
     parser.add_argument('--workers', type=int, default=20, help='Number of parallel worker processes.')
     parser.add_argument('--model', required=True, help='Model name used for response generation.')
+    parser.add_argument('--input-dir', required=True, help='Directory containing {subject}.jsonl construction outputs.')
+    parser.add_argument('--output-dir', required=True, help='Root directory for generated model responses.')
     parser.add_argument('--image-root', default='images', help='Root directory containing subject/benchmark/images paths.')
     args = parser.parse_args()
     subjects = list(args.subjects) if args.subjects else [args.subject]
@@ -160,4 +164,4 @@ if __name__ == '__main__':
         if not subj:
             continue
         print(f'\n========== subject: {subj} ==========')
-        process_jsonl(subj, args.workers, model_name=args.model, image_root=args.image_root)
+        process_jsonl(subj, args.workers, model_name=args.model, image_root=args.image_root, input_dir=args.input_dir, output_dir=args.output_dir)

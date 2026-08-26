@@ -28,25 +28,20 @@ SciMIF is constructed by augmenting samples from publicly available scientific d
 
 ### 1. Construct Constraint-Augmented Questions
 
-`data_construction.py` reads source records from:
-
-```text
-original_data/{subject}.json
-```
-
-Each file is a JSON array. Record IDs are assigned from the array indices.
-The source datasets are not included in this repository. See `data/input_data.json` for a one-record JSON input example and `data/output_data.jsonl` for its corresponding JSONL output example. In an input record, `scientific_instruction_list` contains the candidate scientific instructions; the legacy field name `instruction_list` is also supported.
+The source datasets are not included in this repository. `data/input_data.json` and `data/output_data.jsonl` are format examples only and are not read automatically by the scripts. Prepare the real input as a JSON array following `data/input_data.json`; record IDs are assigned from the array indices. In an input record, `scientific_instruction_list` contains the candidate scientific instructions; the legacy field name `instruction_list` is also supported.
 
 Run the construction script:
 ```bash
 python data_construction.py \
   --subject chemistry \
+  --input-path /path/to/chemistry.json \
+  --output-path output_data/chemistry.jsonl \
   --model MODEL_NAME \
   --N 3 \
   --K 3
 ```
 
-Constructed questions are saved to:
+Constructed questions are saved to the path supplied with `--output-path`, for example:
 
 ```text
 output_data/{subject}.jsonl
@@ -71,12 +66,14 @@ A sample contains the following fields:
 ```bash
 python generation.py \
   --subjects chemistry physics geography life materials \
+  --input-dir output_data \
+  --output-dir generation \
   --model MODEL_NAME \
   --image-root images \
   --workers 4
 ```
 
-Generated responses are saved to:
+For each subject, `generation.py` reads `{input-dir}/{subject}.jsonl`. Generated responses are saved to:
 
 ```text
 generation/{model}/{subject}.jsonl

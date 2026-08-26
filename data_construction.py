@@ -225,18 +225,13 @@ def enhance_question(client, model, question, answer, item_instruction_list, gli
     choose_instruction = [normalize_key(name) for name in item_instruction_list if normalize_key(name) in slib]
     return (current_question, final_instruction_meta, choose_instruction)
 
-def load_subject_records(base_dir: Path, subject: str):
-    input_dir = base_dir / 'original_data'
-    input_file = input_dir / f'{subject}.json'
-    if input_file.exists():
-        source_records = load_json(input_file)
-        if not isinstance(source_records, list):
-            raise ValueError(f'Expected a JSON array in {input_file}')
-    else:
-        paths = sorted(input_dir.glob(f'{subject}_*.json'), key=lambda path: int(path.stem.rsplit('_', 1)[1]))
-        if not paths:
-            raise FileNotFoundError(f'No original data found for subject {subject!r} in {input_dir}')
-        source_records = [load_json(path) for path in paths]
+def load_subject_records(input_path: str, subject: str):
+    input_file = Path(input_path).expanduser().resolve()
+    if not input_file.is_file():
+        raise FileNotFoundError(f'Input file does not exist: {input_file}')
+    source_records = load_json(input_file)
+    if not isinstance(source_records, list):
+        raise ValueError(f'Expected a JSON array in {input_file}')
     records = []
     for idx, source_record in enumerate(source_records):
         if not isinstance(source_record, dict):
@@ -254,11 +249,11 @@ def load_subject_records(base_dir: Path, subject: str):
         records.append(record)
     return (subject, records)
 
-def process(subject, model, N, K):
+def process(subject, model, N, K, input_path, output_path):
     BASE_DIR = Path(__file__).resolve().parent
     instruction_lib_path = BASE_DIR / 'data' / 'instruction.jsonl'
-    subject, raw_data = load_subject_records(BASE_DIR, subject)
-    output_file = BASE_DIR / 'output_data' / f'{subject}.jsonl'
+    subject, raw_data = load_subject_records(input_path, subject)
+    output_file = Path(output_path).expanduser().resolve()
     glib, slib, gmap, i2g = load_instruction_library(instruction_lib_path)
     client = OpenAI(
         api_key="OPENAI_API_KEY",
@@ -323,8 +318,10 @@ def process(subject, model, N, K):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--subject', required=True, help='Scientific discipline: chemistry, physics, geography, life, or materials.')
+    parser.add_argument('--input-path', required=True, help='Path to a JSON array containing source records.')
+    parser.add_argument('--output-path', required=True, help='Path to the constructed JSONL output file.')
     parser.add_argument('--model', required=True)
     parser.add_argument('--N', type=int, default=3, help='maximum number of general-constraint categories sampled per item')
     parser.add_argument('--K', type=int, default=3, help='maximum generation attempts for each candidate general constraint')
     args = parser.parse_args()
-    process(args.subject, args.model, args.N, args.K)
+    process(args.subject, args.model, args.N, args.K, args.input_path, args.output_path)
