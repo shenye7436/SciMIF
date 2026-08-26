@@ -28,7 +28,7 @@ SciMIF is constructed by augmenting samples from publicly available scientific d
 
 ### 1. Construct Constraint-Augmented Questions
 
-The source datasets are not included in this repository. `data/input_data.json` and `data/output_data.jsonl` are format examples only and are not read automatically by the scripts. Prepare the real input as a JSON array following `data/input_data.json`; record IDs are assigned from the array indices. In an input record, `scientific_instruction_list` contains the candidate scientific instructions; the legacy field name `instruction_list` is also supported.
+`data/input_data.json` and `data/output_data.jsonl` are format examples only and are not read automatically by the scripts. Prepare the real input as a JSON array following `data/input_data.json`; record IDs are assigned from the array indices. In an input record, `scientific_instruction_list` contains the candidate scientific instructions.
 
 Run the construction script:
 ```bash
