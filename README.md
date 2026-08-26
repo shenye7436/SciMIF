@@ -35,7 +35,7 @@ original_data/{subject}.json
 ```
 
 Each file is a JSON array. Record IDs are assigned from the array indices.
-The source datasets are not included in this repository. See `data/input_data.json` for a one-record input example and `data/output_data.json` for its corresponding constructed output. In an input record, `scientific_instruction_list` contains the candidate scientific instructions; the legacy field name `instruction_list` is also supported.
+The source datasets are not included in this repository. See `data/input_data.json` for a one-record JSON input example and `data/output_data.jsonl` for its corresponding JSONL output example. In an input record, `scientific_instruction_list` contains the candidate scientific instructions; the legacy field name `instruction_list` is also supported.
 
 Run the construction script:
 ```bash
