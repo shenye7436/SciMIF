@@ -1,5 +1,12 @@
 # SciMIF: Understanding Multimodal Instruction Following in Scientific Domains
 
+<div align="center">
+  <h2 align="center">
+  <a href="https://arxiv.org/abs/2608.25973" style="display: inline-block; text-align: center;">
+      <img alt="arXiv" src="https://img.shields.io/badge/arXiv-2608.25973-b31b1b.svg?style=flat">
+  </a>
+</div>
+
 SciMIF is a benchmark for evaluating whether Multimodal Large Language Models (MLLMs) can follow complex instructions in scientific domains. Unlike conventional scientific benchmarks that primarily evaluate answer correctness, SciMIF evaluates whether a model satisfies explicit scientific and general constraints, including required methods, units, formats, terminology, reasoning procedures, numerical precision, and response structures.
 
 ## Installation
